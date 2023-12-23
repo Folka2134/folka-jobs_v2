@@ -14,7 +14,7 @@ const CreateJob = () => {
           Create Job
         </h3>
 
-        <div className="wrapper my-8">
+        <div className="wrapper">
           <JobForm userId={userId} type="Create" />
         </div>
       </section>
