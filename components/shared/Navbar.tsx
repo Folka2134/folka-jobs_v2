@@ -1,25 +1,33 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import Image from "next/image";
 import React from "react";
+import NavItems from "./NavItems";
+import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
     <header className="w-full border-b">
-      <div className="wrapper flex items-center justify-between">
-        <Link href="/" className="w-36">
-          <p>Home</p>
+      <div className="wrapper flex items-center justify-between bg-[#95A2EF] px-10">
+        <Link href="/" className="">
+          <Image
+            src="/assets/images/logo.jpeg"
+            alt="logo"
+            width={100}
+            height={100}
+          />
         </Link>
 
-        {/* <SignedIn>
-          <nav className="md:flex-between hidden w-full max-w-xs">
+        <SignedIn>
+          <nav className="hidden w-full max-w-xs md:flex">
             <NavItems />
           </nav>
-        </SignedIn> */}
+        </SignedIn>
 
         <div className="flex w-32 justify-end gap-3">
           <SignedIn>
             <UserButton afterSignOutUrl="/" />
-            {/* <MobileNav /> */}
+            <MobileNav />
           </SignedIn>
           <SignedOut>
             <button className="rounded-full">
