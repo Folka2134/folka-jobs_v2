@@ -4,7 +4,6 @@ import { CreateJobParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
-import JobForm from "@/components/shared/JobForm"
 import Job from "../database/models/job.model"
 
 export const createJob = async ({ job, userId, path }: CreateJobParams) => {

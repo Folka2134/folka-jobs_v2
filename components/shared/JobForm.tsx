@@ -58,7 +58,7 @@ const JobForm = ({ userId, type }: JobFormProps) => {
 
     if (type === "Create") {
       try {
-        const newEvent = await createJob({
+        const newJob = await createJob({
           job: {
             ...values,
             imageUrl: uploadedImageUrl,
@@ -66,9 +66,9 @@ const JobForm = ({ userId, type }: JobFormProps) => {
           userId,
           path: "/profile",
         });
-        if (newEvent) {
+        if (newJob) {
           form.reset();
-          router.push(`/events/${newEvent._id}`);
+          router.push(`/jobs/${newJob._id}`);
         }
       } catch (error) {
         console.log(error);
