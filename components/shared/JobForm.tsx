@@ -54,10 +54,10 @@ const JobForm = ({ userId, type }: JobFormProps) => {
         <div className="flex flex-col gap-5">
           <FormField
             control={form.control}
-            name="description"
+            name="imageUrl"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormControl>
+                <FormControl className="h-72">
                   <FileUploader
                     onFieldChange={field.onChange}
                     imageUrl={field.value}
@@ -124,6 +124,7 @@ const JobForm = ({ userId, type }: JobFormProps) => {
                 <FormControl>
                   <Textarea
                     className="rounded-xl"
+                    {...field}
                     placeholder="Job description"
                   />
                 </FormControl>

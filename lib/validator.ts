@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const jobFormSchema = z.object({
-  imageUrl: z.string().url({ message: "Invalid url" }),
+  imageUrl: z.string(),
   companyName: z.string().min(2, {
     message: "Company name must be at least 2 characters.",
   }),
