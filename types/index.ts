@@ -15,98 +15,82 @@ export type UpdateUserParams = {
   photo: string
 }
 
-// ====== EVENT PARAMS
-export type CreateEventParams = {
+// ====== JOB PARAMS
+export type CreateJobParams = {
   userId: string
-  event: {
-    title: string
-    description: string
-    location: string
+  job: {
     imageUrl: string
-    startDateTime: Date
-    endDateTime: Date
-    categoryId: string
-    price: string
-    isFree: boolean
-    url: string
+    companyName: string
+    title: string
+    location: string
+    description: string
+    roles: string[]
+    roleType: string
+    datePosted: Date
+    dateUpdated: Date
+    featured: boolean
   }
   path: string
 }
 
-export type UpdateEventParams = {
+export type UpdateJobParams = {
   userId: string
-  event: {
+  job: {
     _id: string
-    title: string
     imageUrl: string
-    description: string
+    companyName: string
+    title: string
     location: string
-    startDateTime: Date
-    endDateTime: Date
-    categoryId: string
-    price: string
-    isFree: boolean
-    url: string
+    description: string
+    roles: string[]
+    roleType: string
+    datePosted: Date
+    dateUpdated: Date
+    featured: boolean
   }
   path: string
 }
 
-export type DeleteEventParams = {
-  eventId: string
+export type DeleteJobParams = {
+  jobId: string
   path: string
 }
 
-export type GetAllEventsParams = {
+export type GetAllJobsParams = {
   query: string
-  category: string
   limit: number
   page: number
 }
 
-export type GetEventsByUserParams = {
+export type GetJobsByUserParams = {
   userId: string
   limit?: number
   page: number
 }
 
-export type GetRelatedEventsByCategoryParams = {
-  categoryId: string
-  eventId: string
-  limit?: number
-  page: number | string
-}
-
-export type Event = {
+export type Job = {
   _id: string
-  title: string
-  description: string
-  price: string
-  isFree: boolean
   imageUrl: string
+  companyName: string
+  title: string
   location: string
-  startDateTime: Date
-  endDateTime: Date
-  url: string
-  organizer: {
+  description: string
+  roles: string[]
+  roleType: string
+  datePosted: Date
+  dateUpdated: Date
+  featured: boolean
+  recruiter: {
     _id: string
     firstName: string
     lastName: string
   }
-  category: {
-    _id: string
-    name: string
-  }
-}
-
-// ====== CATEGORY PARAMS
-export type CreateCategoryParams = {
-  categoryName: string
 }
 
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
-  eventTitle: string
-  eventId: string
+  jobTitle: string
+  jobId: string
   price: string
   isFree: boolean
   buyerId: string
@@ -114,14 +98,14 @@ export type CheckoutOrderParams = {
 
 export type CreateOrderParams = {
   stripeId: string
-  eventId: string
+  jobId: string
   buyerId: string
   totalAmount: string
   createdAt: Date
 }
 
-export type GetOrdersByEventParams = {
-  eventId: string
+export type GetOrdersByJobParams = {
+  jobId: string
   searchString: string
 }
 
