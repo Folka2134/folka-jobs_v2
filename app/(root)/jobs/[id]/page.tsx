@@ -3,9 +3,11 @@ import Image from "next/image";
 import { getJobById } from "@/lib/actions/job.actions";
 import { SearchParamProps } from "@/types";
 import { formatDateTime } from "@/lib/utils";
+import { currentUser } from "@clerk/nextjs";
 
 const JobPage = async ({ params: { id } }: SearchParamProps) => {
   const job = await getJobById(id);
+  const user = await currentUser();
 
   const tagColours = ["#95DCF0", "#C295F0", "#95BFF0", "#A495F0", "#95A2EF"];
 
@@ -32,7 +34,10 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
                 </span>
               </p>
               <div className="flex gap-3">
-                {job.featured ? (
+                {job.recruiter._id === user?.publicMetadata.userId &&
+                !job.featured ? (
+                  <button className="text-black">Feature Job!</button>
+                ) : job.featured ? (
                   <span className="rounded-full bg-[#C295F0] px-2 py-1 text-white transition-opacity duration-200 hover:opacity-90">
                     Featured
                   </span>
@@ -41,7 +46,7 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
                 )}
               </div>
             </div>
-            <button>Buy Ticket</button>
+            <button>Apply now!</button>
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
