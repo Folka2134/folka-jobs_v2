@@ -15,7 +15,7 @@ const JobCard = async ({ job }: CardProps) => {
   return (
     <div className="overflow-hiudden transtion-all group relative flex min-h-[300px] w-full max-w-[400px] flex-col rounded-xl bg-white shadow-md hover:shadow-lg md:min-h-[438px]">
       <Link
-        href={`/jobs/${job._id}}`}
+        href={`/jobs/${job._id}`}
         style={{ backgroundImage: `url(${job.imageUrl})` }}
         className="flex flex-grow justify-center bg-gray-50 bg-cover bg-center text-gray-500"
       />
