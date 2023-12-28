@@ -1,4 +1,19 @@
-import { Schema, model, models } from "mongoose";
+import { Document, Schema, model, models } from "mongoose";
+
+export interface IJob extends Document {
+  _id: string;
+  imageUrl: string;
+  companyName: string;
+  title: string;
+  location: string;
+  description: string;
+  roles: string[];
+  roleType: string;
+  datePosted: Date;
+  dateUpdated: Date;
+  featured: boolean;
+  recruiter: { _id: string, firstName: string, lastName: string };
+}
 
 const JobSchema = new Schema({
   imageUrl: { type: String, required: true },
