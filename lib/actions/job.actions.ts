@@ -1,10 +1,11 @@
 "use server"
 
-import { CreateJobParams, GetAllJobsParams } from "@/types"
+import { CreateJobParams, DeleteJobParams, GetAllJobsParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
 import Job from "../database/models/job.model"
+import { revalidatePath } from "next/cache"
 
 const getRecruiterDetails = async (query: any) => {
   return query.populate({ path: "recruiter", model: User, select: "_id firstName lastName" })
@@ -64,4 +65,16 @@ export const getAllJobs = async ({ query, limit=6, page} : GetAllJobsParams) => 
   } catch (error) {
     handleError(error)
   }
+}
+
+export const deleteJob = async ({ jobId, path }: DeleteJobParams) => {
+  try {
+    await connectToDatabase()
+
+    const deletedJob = await Job.findByIdAndDelete(jobId)
+    
+    if(deletedJob) revalidatePath(path)
+  } catch (error) {
+    handleError(error)
+  }  
 }
