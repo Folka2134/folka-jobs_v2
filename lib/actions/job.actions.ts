@@ -1,6 +1,6 @@
 "use server"
 
-import { CreateJobParams } from "@/types"
+import { CreateJobParams, GetAllJobsParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
@@ -40,6 +40,27 @@ export const getJobById = async (jobId: string) => {
     }
 
     return JSON.parse(JSON.stringify(job))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export const getAllJobs = async ({ query, limit=6, page} : GetAllJobsParams) => {
+  try {
+    await connectToDatabase()
+
+    const conditions = {}
+
+    const jobsQuery = Job.find(conditions).sort({ createdAt: "desc"}).skip(0).limit(limit)
+
+    const jobs = await getRecruiterDetails(jobsQuery)
+    const jobsCount = await Job.countDocuments(conditions)
+
+    return {
+      data: JSON.parse(JSON.stringify(jobs)),
+      totalPages: Math.ceil(jobsCount / limit),
+    }
+    
   } catch (error) {
     handleError(error)
   }
