@@ -13,7 +13,7 @@ const JobCard = async ({ job }: CardProps) => {
   const user = await currentUser();
 
   return (
-    <div className="overflow-hiudden transtion-all group relative flex min-h-[300px] w-full max-w-[400px] flex-col rounded-xl bg-white shadow-md hover:shadow-lg md:min-h-[438px]">
+    <div className="transtion-all group relative flex min-h-[300px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white py-2 shadow-md hover:shadow-lg md:min-h-[438px]">
       <Link
         href={`/jobs/${job._id}`}
         style={{ backgroundImage: `url(${job.imageUrl})` }}
@@ -21,7 +21,7 @@ const JobCard = async ({ job }: CardProps) => {
       />
       <Link
         href={`/jobs/${job._id}`}
-        className="flex min-h-[180px] flex-col gap-3 p-5 md:gap-4"
+        className="flex  flex-col gap-2 p-5 md:gap-4"
       >
         <div className="flex flex-col gap-2">
           {job.featured ? (
@@ -44,24 +44,24 @@ const JobCard = async ({ job }: CardProps) => {
               {job.companyName}
             </span>
           </p>
-          {user?.publicMetadata.userId === job.recruiter._id ? (
-            <Link
-              href={`/jobs/${job._id}/update`}
-              className="flex justify-center gap-2"
-            >
-              <Image
-                src="/assets/icons/edit.svg"
-                alt="edit"
-                width={20}
-                height={20}
-              />
-              <button>Update</button>
-            </Link>
-          ) : (
-            <button>Apply now!</button>
-          )}
         </div>
       </Link>
+      {user?.publicMetadata.userId === job.recruiter._id ? (
+        <Link
+          href={`/jobs/${job._id}/update`}
+          className="flex justify-center gap-2"
+        >
+          <Image
+            src="/assets/icons/edit.svg"
+            alt="edit"
+            width={20}
+            height={20}
+          />
+          <button>Update</button>
+        </Link>
+      ) : (
+        <button>Apply now!</button>
+      )}
     </div>
   );
 };
