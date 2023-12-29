@@ -23,18 +23,20 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@/lib/uploadthing";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { createJob } from "@/lib/actions/job.actions";
+import { IJob } from "@/lib/database/models/job.model";
 
 type JobFormProps = {
   userId: string;
   type: "Create" | "Update";
+  job?: IJob;
+  jobId?: string;
 };
 
-const JobForm = ({ userId, type }: JobFormProps) => {
+const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const initialValues = jobDefaultValues;
+  const initialValues = job && type === "Update" ? job : jobDefaultValues;
   const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
