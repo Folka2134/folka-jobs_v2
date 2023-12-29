@@ -1,5 +1,6 @@
 import JobList from "@/components/shared/JobList";
 import Navbar from "@/components/shared/Navbar";
+import { Searchbar } from "@/components/shared/Searchbar";
 import { getAllJobs } from "@/lib/actions/job.actions";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +13,7 @@ export default async function Home() {
       <div className="flex w-full flex-col">
         <h1 className=" text-3xl">Browse Jobs</h1>
         <div className="my-5 flex justify-between">
-          <div>*Search bar*</div>
+          {/* <Searchbar /> */}
           <Link href="/jobs/create" className="">
             Post job
           </Link>
