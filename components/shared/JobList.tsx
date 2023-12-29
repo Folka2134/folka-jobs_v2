@@ -7,7 +7,7 @@ type CollectionProps = {
   emptyTitle: string;
   page: number | string;
   totalPages?: number;
-  collectionType?: "Jobs_Organized" | "My_Jobs" | "All_Jobs";
+  collectionType?: "Jobs_Created" | "Applied_Jobs" | "All_Jobs" | "Saved_Jobs";
   urlParamName?: string;
   limit: number;
 };
