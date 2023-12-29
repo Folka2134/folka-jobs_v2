@@ -4,11 +4,10 @@ export const NavLinks = [
     route: "/"
   },
   {
-    label: "Saved Jobs",
-    route: "/saved-jobs/"
+    label: "Profile",
+    route: "/profile/"
   },
 ]
-
 export const jobDefaultValues = {
   imageUrl: '',
   companyName: "",
