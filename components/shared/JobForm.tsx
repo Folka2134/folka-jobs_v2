@@ -241,8 +241,13 @@ const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
             )}
           />
         </div>
-        <Button type="submit" className="button bg-[#95A2EF]">
-          Submit
+        <Button
+          type="submit"
+          size="lg"
+          disabled={form.formState.isSubmitting}
+          className="button col-span-2 w-full"
+        >
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Job `}
         </Button>
       </form>
     </Form>
