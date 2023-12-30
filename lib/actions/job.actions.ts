@@ -110,12 +110,18 @@ export async function updateJob({ userId, job, path }: UpdateJobParams) {
 }
 
 // SAVE JOB
-export async function saveJob({userId, jobId} : SaveJobParams) {
+export async function saveJob({ userId, jobId } : SaveJobParams) {
   try {
     await connectToDatabase()
 
-    const savedJob = await SavedJob.create({ userId, jobId })
-  
+    const savedJob = await SavedJob.findOneAndUpdate(
+      { userId, jobId },
+      { userId, jobId },
+      { upsert: true, new: true, runValidators: true }
+    );
+
+    console.log("Job saved");
+
     return JSON.parse(JSON.stringify(savedJob))
   } catch (error) {
     handleError(error)

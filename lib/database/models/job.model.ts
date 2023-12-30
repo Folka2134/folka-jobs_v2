@@ -34,6 +34,8 @@ const SavedJobsSchema = new Schema({
   jobId: { type: Schema.Types.ObjectId, ref: 'Job' },
 })
 
+SavedJobsSchema.index({ userId: 1, jobId: 1 }, { unique: true });
+
 export const Job = models.Job || model('Job', JobSchema);
 
 export const SavedJob = models.SavedJob || model("SavedJob", SavedJobsSchema)
