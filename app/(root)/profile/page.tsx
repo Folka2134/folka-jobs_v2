@@ -14,8 +14,6 @@ const ProfilePage = async () => {
   // const usersSavedJobs =
   const appliedJobs = "#";
 
-  console.log(savedJobs);
-
   return (
     <>
       {/* Saved Jobs */}
