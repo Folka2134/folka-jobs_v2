@@ -1,10 +1,10 @@
 "use server"
 
-import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, UpdateJobParams } from "@/types"
+import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
-import Job from "../database/models/job.model"
+import { Job, SavedJob } from "../database/models/job.model"
 import { revalidatePath } from "next/cache"
 
 const getRecruiterDetails = async (query: any) => {
@@ -108,6 +108,30 @@ export async function updateJob({ userId, job, path }: UpdateJobParams) {
     handleError(error)
   }
 }
+
+// SAVE JOB
+export async function saveJob({userId, jobId} : SaveJobParams) {
+  try {
+    await connectToDatabase()
+
+    const savedJob = await SavedJob.create({ userId, jobId })
+  
+    return JSON.parse(JSON.stringify(savedJob))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export async function getSavedJobsByUser({userId}: GetSavedJobsParams) {
+
+  const savedJobIds = await SavedJob.find({ userId: userId })
+  const savedJobsWithDetails = await Job.find({ _id: { $in: savedJobIds.map((savedJob) => savedJob.jobId) } })
+
+  return JSON.parse(JSON.stringify(savedJobsWithDetails))
+}
+
+
+// APPLY TO JOB
 
 export const deleteJob = async ({ jobId, path }: DeleteJobParams) => {
   try {

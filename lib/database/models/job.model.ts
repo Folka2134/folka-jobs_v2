@@ -26,9 +26,16 @@ const JobSchema = new Schema({
   datePosted: { type: Date, default: Date.now },
   dateUpdated: { type: Date, default: Date.now },
   featured: { type: Boolean, default: false },
-  recruiter: { type: Schema.Types.ObjectId, ref: 'User' }
+  recruiter: { type: Schema.Types.ObjectId, ref: 'User' },
 })
 
-const Job = models.Job || model('Job', JobSchema);
+const SavedJobsSchema = new Schema({
+  userId:{ type: Schema.Types.ObjectId, ref: 'User' },
+  jobId: { type: Schema.Types.ObjectId, ref: 'Job' },
+})
 
-export default Job;
+export const Job = models.Job || model('Job', JobSchema);
+
+export const SavedJob = models.SavedJob || model("SavedJob", SavedJobsSchema)
+
+// export default Job;

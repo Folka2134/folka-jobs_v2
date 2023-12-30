@@ -87,6 +87,16 @@ export type Job = {
   }
 }
 
+export type SaveJobParams = {
+  userId?: string
+  jobId: string
+}
+
+export type GetSavedJobsParams = {
+  userId: string
+}
+
+
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
   jobTitle: string

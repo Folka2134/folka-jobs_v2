@@ -1,13 +1,16 @@
 import Image from "next/image";
 
-import { getJobById } from "@/lib/actions/job.actions";
+import { getJobById, saveJob } from "@/lib/actions/job.actions";
 import { SearchParamProps } from "@/types";
 import { formatDateTime } from "@/lib/utils";
-import { currentUser } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
+import UserButton from "@/components/shared/UserButton";
 
 const JobPage = async ({ params: { id } }: SearchParamProps) => {
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+
   const job = await getJobById(id);
-  const user = await currentUser();
 
   const tagColours = ["#95DCF0", "#C295F0", "#95BFF0", "#A495F0", "#95A2EF"];
 
@@ -34,8 +37,7 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
                 </span>
               </p>
               <div className="flex gap-3">
-                {job.recruiter._id === user?.publicMetadata.userId &&
-                !job.featured ? (
+                {job.recruiter._id === userId && !job.featured ? (
                   <button className="text-black">Feature Job!</button>
                 ) : job.featured ? (
                   <span className="rounded-full bg-[#C295F0] px-2 py-1 text-white transition-opacity duration-200 hover:opacity-90">
@@ -46,7 +48,10 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
                 )}
               </div>
             </div>
-            <button>Apply now!</button>
+            <div className="flex w-full gap-2">
+              <button className="flex-1 bg-purple-300">Apply now!</button>
+              <UserButton buttonType="Save Job" userId={userId} jobId={id} />
+            </div>
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
