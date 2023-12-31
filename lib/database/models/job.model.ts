@@ -33,11 +33,16 @@ const SavedJobsSchema = new Schema({
   userId:{ type: Schema.Types.ObjectId, ref: 'User' },
   jobId: { type: Schema.Types.ObjectId, ref: 'Job' },
 })
-
 SavedJobsSchema.index({ userId: 1, jobId: 1 }, { unique: true });
+
+const AppliedJobsSchema = new Schema({
+  userId:{ type: Schema.Types.ObjectId, ref: 'User' },
+  jobId: { type: Schema.Types.ObjectId, ref: 'Job' },
+})
+AppliedJobsSchema.index({ userId: 1, jobId: 1 }, { unique: true });
 
 export const Job = models.Job || model('Job', JobSchema);
 
 export const SavedJob = models.SavedJob || model("SavedJob", SavedJobsSchema)
 
-// export default Job;
+export const AppliedJob = models.AppliedJob || model("AppliedJob", AppliedJobsSchema)

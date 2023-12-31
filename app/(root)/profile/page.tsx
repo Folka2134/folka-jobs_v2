@@ -1,6 +1,10 @@
 import JobList from "@/components/shared/JobList";
 import { Button } from "@/components/ui/button";
-import { getJobsByUser, getSavedJobsByUser } from "@/lib/actions/job.actions";
+import {
+  getAppliedJobsByUser,
+  getJobsByUser,
+  getSavedJobsByUser,
+} from "@/lib/actions/job.actions";
 import { auth } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
@@ -11,8 +15,7 @@ const ProfilePage = async () => {
 
   const recruitersJobs = await getJobsByUser({ userId, page: 1 });
   const savedJobs = await getSavedJobsByUser({ userId });
-  // const usersSavedJobs =
-  const appliedJobs = "#";
+  const appliedJobs = await getAppliedJobsByUser({ userId });
 
   return (
     <>
@@ -47,17 +50,17 @@ const ProfilePage = async () => {
           </Button>
         </div>
       </section>
-      {/* <section className="wrapper my-8">
+      <section className="wrapper my-8">
         <JobList
-          data={jobs?.data}
+          data={appliedJobs}
           emptyTitle="No Applied Jobs"
           collectionType="Applied_Jobs"
           limit={6}
           page={1}
           totalPages={2}
-          urlParamsName="jobsPage"
+          // urlParamsName="jobsPage"
         />
-      </section> */}
+      </section>
 
       {/* Jobs Posted */}
       <section className="bg-gray-50 py-5 md:py-10">

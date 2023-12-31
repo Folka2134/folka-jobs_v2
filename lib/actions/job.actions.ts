@@ -1,10 +1,10 @@
 "use server"
 
-import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams } from "@/types"
+import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams, AppliedJobParams, GetAppliedJobsParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
-import { Job, SavedJob } from "../database/models/job.model"
+import { AppliedJob, Job, SavedJob } from "../database/models/job.model"
 import { revalidatePath } from "next/cache"
 
 const getRecruiterDetails = async (query: any) => {
@@ -58,7 +58,7 @@ export async function getJobsByUser({ userId, limit = 6, page }: GetJobsByUserPa
       .limit(limit)
 
     const jobs = await getRecruiterDetails(jobsQuery)
-    const jobsCount = await Job.countDocuments(conditions)
+    const jobsCount = await Job.countDocuments(conditions)    
 
     return { data: JSON.parse(JSON.stringify(jobs)), totalPages: Math.ceil(jobsCount / limit) }
   } catch (error) {
@@ -120,24 +120,59 @@ export async function saveJob({ userId, jobId } : SaveJobParams) {
       { upsert: true, new: true, runValidators: true }
     );
 
-    console.log("Job saved");
-
     return JSON.parse(JSON.stringify(savedJob))
   } catch (error) {
     handleError(error)
   }
 }
 
-export async function getSavedJobsByUser({userId}: GetSavedJobsParams) {
+export async function getSavedJobsByUser({userId }: GetSavedJobsParams) {
+  try {
+    await connectToDatabase()
 
-  const savedJobIds = await SavedJob.find({ userId: userId })
-  const savedJobsWithDetails = await Job.find({ _id: { $in: savedJobIds.map((savedJob) => savedJob.jobId) } })
+    const conditions = { userId: userId }
 
-  return JSON.parse(JSON.stringify(savedJobsWithDetails))
+    const savedJobQuery = await SavedJob.find(conditions)
+    
+    const savedJobs = await Job.find({ _id: { $in: savedJobQuery.map((savedJob) => savedJob.jobId) } })
+  
+    return JSON.parse(JSON.stringify(savedJobs))
+  } catch (error) {
+    handleError(error)
+  }
+
 }
 
-
 // APPLY TO JOB
+
+export async function applyJob({ userId, jobId } : AppliedJobParams) {
+  try {
+    await connectToDatabase()
+
+    const appliedJob = await AppliedJob.findOneAndUpdate(
+      { userId, jobId },
+      { userId, jobId },
+      { upsert: true, new: true, runValidators: true }
+    );
+
+    return JSON.parse(JSON.stringify(appliedJob))
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export async function getAppliedJobsByUser({userId}: GetAppliedJobsParams) {
+  try {
+    await connectToDatabase()
+
+    const appliedJobIds = await AppliedJob.find({ userId: userId })
+    const appliedJobsWithDetails = await Job.find({ _id: { $in: appliedJobIds.map((appliedJob) => appliedJob.jobId) } })
+  
+    return JSON.parse(JSON.stringify(appliedJobsWithDetails))
+  } catch (error) {
+    handleError(error)
+  }
+}
 
 export const deleteJob = async ({ jobId, path }: DeleteJobParams) => {
   try {
