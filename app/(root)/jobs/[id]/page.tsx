@@ -11,6 +11,7 @@ import { auth } from "@clerk/nextjs";
 import UserButton from "@/components/shared/UserButton";
 import { useState } from "react";
 import { SavedJob } from "@/lib/database/models/job.model";
+import Link from "next/link";
 
 const JobPage = async ({ params: { id } }: SearchParamProps) => {
   const jobId = id;
@@ -58,18 +59,33 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
                 )}
               </div>
             </div>
-            <div className="flex w-full gap-2">
-              {jobIsApplied ? (
-                <UserButton buttonType="Unapply" userId={userId} jobId={id} />
-              ) : (
-                <UserButton buttonType="Apply" userId={userId} jobId={id} />
-              )}
-              {jobIsSaved ? (
-                <UserButton buttonType="Unsave" userId={userId} jobId={id} />
-              ) : (
-                <UserButton buttonType="Save" userId={userId} jobId={id} />
-              )}
-            </div>
+            {job.recruiter._id === userId ? (
+              <Link
+                href={`/jobs/${job._id}/update`}
+                className="flex justify-center gap-2"
+              >
+                <Image
+                  src="/assets/icons/edit.svg"
+                  alt="edit"
+                  width={20}
+                  height={20}
+                />
+                <button>Update</button>
+              </Link>
+            ) : (
+              <div className="flex w-full gap-2">
+                {jobIsApplied ? (
+                  <UserButton buttonType="Unapply" userId={userId} jobId={id} />
+                ) : (
+                  <UserButton buttonType="Apply" userId={userId} jobId={id} />
+                )}
+                {jobIsSaved ? (
+                  <UserButton buttonType="Unsave" userId={userId} jobId={id} />
+                ) : (
+                  <UserButton buttonType="Save" userId={userId} jobId={id} />
+                )}
+              </div>
+            )}
 
             <div className="flex flex-col gap-5">
               <div className="flex gap-2 md:gap-3">
