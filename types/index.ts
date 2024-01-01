@@ -96,6 +96,12 @@ export type GetSavedJobsParams = {
   userId: string
 }
 
+export type DeleteSavedJobParams = {
+  userId?: string
+  jobId: string
+  path: string
+}
+
 export type AppliedJobParams = {
   userId?: string
   jobId: string
@@ -105,6 +111,11 @@ export type GetAppliedJobsParams = {
   userId: string
 }
 
+export type DeleteAppliedJobParams = {
+  userId?: string
+  jobId: string
+  path: string
+}
 
 
 

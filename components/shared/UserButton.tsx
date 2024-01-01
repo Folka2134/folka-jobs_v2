@@ -1,7 +1,13 @@
 "use client";
 
-import { applyJob, saveJob } from "@/lib/actions/job.actions";
+import {
+  applyJob,
+  deleteAppliedJob,
+  deleteSavedJob,
+  saveJob,
+} from "@/lib/actions/job.actions";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 type UserButtonProps = {
   buttonType: "Save" | "Unsave" | "Apply" | "Unapply";
@@ -13,22 +19,33 @@ const handleButtonClick = (
   buttonType: string,
   userId: string,
   jobId: string,
+  path: string,
 ) => {
   switch (buttonType) {
     case "Save":
       saveJob({ userId, jobId });
       console.log("Trying to save");
       break;
+    case "Unsave":
+      deleteSavedJob({ userId, jobId, path });
+      console.log("Trying to unsave");
+      break;
     case "Apply":
       applyJob({ userId, jobId });
       console.log("Trying to apply");
+      break;
+    case "Unapply":
+      deleteAppliedJob({ userId, jobId, path });
+      console.log("Trying to unapply");
       break;
   }
 };
 
 const UserButton = ({ buttonType, userId, jobId }: UserButtonProps) => {
+  const path = usePathname();
+
   return (
-    <button onClick={() => handleButtonClick(buttonType, userId, jobId)}>
+    <button onClick={() => handleButtonClick(buttonType, userId, jobId, path)}>
       {buttonType}
     </button>
   );

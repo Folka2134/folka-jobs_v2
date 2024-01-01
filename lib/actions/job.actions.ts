@@ -1,6 +1,6 @@
 "use server"
 
-import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams, AppliedJobParams, GetAppliedJobsParams } from "@/types"
+import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams, AppliedJobParams, GetAppliedJobsParams, DeleteSavedJobParams, DeleteAppliedJobParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
@@ -140,7 +140,19 @@ export async function getSavedJobsByUser({userId }: GetSavedJobsParams) {
   } catch (error) {
     handleError(error)
   }
+}
 
+export const deleteSavedJob = async ({ userId, jobId, path }: DeleteSavedJobParams) => {
+  try {
+    await connectToDatabase()
+
+    const deletedSavedJob = await SavedJob.findOneAndDelete({ jobId, userId  })
+    
+    if(deletedSavedJob) revalidatePath(path)
+    
+  } catch (error) {
+    handleError(error)
+  }  
 }
 
 // APPLY TO JOB
@@ -159,6 +171,19 @@ export async function applyJob({ userId, jobId } : AppliedJobParams) {
   } catch (error) {
     handleError(error)
   }
+}
+
+export const deleteAppliedJob = async ({ userId, jobId, path }: DeleteAppliedJobParams) => {
+  try {
+    await connectToDatabase()
+
+    const deletedAppliedJob = await AppliedJob.findOneAndDelete({ jobId, userId  })
+    
+    if(deletedAppliedJob) revalidatePath(path)
+    
+  } catch (error) {
+    handleError(error)
+  }  
 }
 
 export async function getAppliedJobsByUser({userId}: GetAppliedJobsParams) {
