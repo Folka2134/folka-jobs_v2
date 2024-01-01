@@ -38,11 +38,7 @@ const JobCard = async ({ job }: CardProps) => {
             {job.title}
           </p>
           <p className="">
-            by{" "}
-            <span className="text-[#95A2F0]">
-              {`${job.recruiter.firstName} ${job.recruiter.lastName}`} |{" "}
-              {job.companyName}
-            </span>
+            by <span className="text-[#95A2F0]">{job.companyName}</span>
           </p>
         </div>
       </Link>
