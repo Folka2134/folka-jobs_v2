@@ -23,7 +23,7 @@ const handleButtonClick = (
 ) => {
   switch (buttonType) {
     case "Save":
-      saveJob({ userId, jobId });
+      saveJob({ userId, jobId, path });
       console.log("Trying to save");
       break;
     case "Unsave":
@@ -31,7 +31,7 @@ const handleButtonClick = (
       console.log("Trying to unsave");
       break;
     case "Apply":
-      applyJob({ userId, jobId });
+      applyJob({ userId, jobId, path });
       console.log("Trying to apply");
       break;
     case "Unapply":

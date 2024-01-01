@@ -90,6 +90,12 @@ export type Job = {
 export type SaveJobParams = {
   userId?: string
   jobId: string
+  path: string
+}
+
+export type IsSaveJobParams = {
+  userId?: string
+  jobId: string
 }
 
 export type GetSavedJobsParams = {
@@ -103,6 +109,12 @@ export type DeleteSavedJobParams = {
 }
 
 export type AppliedJobParams = {
+  userId?: string
+  jobId: string
+  path: string
+}
+
+export type IsAppliedJobParams = {
   userId?: string
   jobId: string
 }

@@ -1,31 +1,28 @@
 import Image from "next/image";
 
-import { getJobById } from "@/lib/actions/job.actions";
+import {
+  getJobById,
+  isJobApplied,
+  isJobSaved,
+} from "@/lib/actions/job.actions";
 import { SearchParamProps } from "@/types";
 import { formatDateTime } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import UserButton from "@/components/shared/UserButton";
+import { useState } from "react";
+import { SavedJob } from "@/lib/database/models/job.model";
 
 const JobPage = async ({ params: { id } }: SearchParamProps) => {
+  const jobId = id;
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
   const job = await getJobById(id);
 
+  const jobIsSaved = await isJobSaved({ userId, jobId });
+  const jobIsApplied = await isJobApplied({ userId, jobId });
+
   const tagColours = ["#95DCF0", "#C295F0", "#95BFF0", "#A495F0", "#95A2EF"];
-
-  // const checkIfJobIsSaved = async (userId: any, id: any) => {
-  //   const existingSavedJob = await SavedJob.findOne({ userId, id });
-
-  //   console.log(existingSavedJob);
-
-  //   if (existingSavedJob) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // };
-  // const isJobAlreadySaved = await checkIfJobIsSaved(userId, id);
 
   return (
     <section className="flex justify-center bg-gray-50">
@@ -62,24 +59,16 @@ const JobPage = async ({ params: { id } }: SearchParamProps) => {
               </div>
             </div>
             <div className="flex w-full gap-2">
-              {/* <UserButton
-                buttonType="Apply to Job"
-                userId={userId}
-                jobId={id}
-              />
-              {isJobAlreadySaved ? (
-                <UserButton
-                  buttonType="Unsave Job"
-                  userId={userId}
-                  jobId={id}
-                />
+              {jobIsApplied ? (
+                <UserButton buttonType="Unapply" userId={userId} jobId={id} />
               ) : (
-                <UserButton buttonType="Save Job" userId={userId} jobId={id} />
-              )} */}
-              <UserButton buttonType="Apply" userId={userId} jobId={id} />
-              <UserButton buttonType="Unapply" userId={userId} jobId={id} />
-              <UserButton buttonType="Save" userId={userId} jobId={id} />
-              <UserButton buttonType="Unsave" userId={userId} jobId={id} />
+                <UserButton buttonType="Apply" userId={userId} jobId={id} />
+              )}
+              {jobIsSaved ? (
+                <UserButton buttonType="Unsave" userId={userId} jobId={id} />
+              ) : (
+                <UserButton buttonType="Save" userId={userId} jobId={id} />
+              )}
             </div>
 
             <div className="flex flex-col gap-5">

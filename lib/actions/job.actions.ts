@@ -1,6 +1,6 @@
 "use server"
 
-import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams, AppliedJobParams, GetAppliedJobsParams, DeleteSavedJobParams, DeleteAppliedJobParams } from "@/types"
+import { CreateJobParams, DeleteJobParams, GetAllJobsParams, GetJobsByUserParams, SaveJobParams, UpdateJobParams, GetSavedJobsParams, AppliedJobParams, GetAppliedJobsParams, DeleteSavedJobParams, DeleteAppliedJobParams, IsSaveJobParams, IsAppliedJobParams } from "@/types"
 import { handleError } from "../utils"
 import { connectToDatabase } from "../database"
 import User from "../database/models/user.model"
@@ -110,7 +110,7 @@ export async function updateJob({ userId, job, path }: UpdateJobParams) {
 }
 
 // SAVE JOB
-export async function saveJob({ userId, jobId } : SaveJobParams) {
+export async function saveJob({ userId, jobId, path } : SaveJobParams) {
   try {
     await connectToDatabase()
 
@@ -119,6 +119,8 @@ export async function saveJob({ userId, jobId } : SaveJobParams) {
       { userId, jobId },
       { upsert: true, new: true, runValidators: true }
     );
+
+    if(savedJob) revalidatePath(path)
 
     return JSON.parse(JSON.stringify(savedJob))
   } catch (error) {
@@ -155,9 +157,22 @@ export const deleteSavedJob = async ({ userId, jobId, path }: DeleteSavedJobPara
   }  
 }
 
+export async function isJobSaved({ userId, jobId }: IsSaveJobParams) {
+  try {
+    await connectToDatabase();
+
+    const savedJob = await SavedJob.findOne({ userId, jobId });
+
+    return !!savedJob;
+  } catch (error) {
+    handleError(error);
+    return false; 
+  }
+}
+
 // APPLY TO JOB
 
-export async function applyJob({ userId, jobId } : AppliedJobParams) {
+export async function applyJob({ userId, jobId, path } : AppliedJobParams) {
   try {
     await connectToDatabase()
 
@@ -167,23 +182,12 @@ export async function applyJob({ userId, jobId } : AppliedJobParams) {
       { upsert: true, new: true, runValidators: true }
     );
 
+    if(appliedJob) revalidatePath(path)
+
     return JSON.parse(JSON.stringify(appliedJob))
   } catch (error) {
     handleError(error)
   }
-}
-
-export const deleteAppliedJob = async ({ userId, jobId, path }: DeleteAppliedJobParams) => {
-  try {
-    await connectToDatabase()
-
-    const deletedAppliedJob = await AppliedJob.findOneAndDelete({ jobId, userId  })
-    
-    if(deletedAppliedJob) revalidatePath(path)
-    
-  } catch (error) {
-    handleError(error)
-  }  
 }
 
 export async function getAppliedJobsByUser({userId}: GetAppliedJobsParams) {
@@ -196,6 +200,33 @@ export async function getAppliedJobsByUser({userId}: GetAppliedJobsParams) {
     return JSON.parse(JSON.stringify(appliedJobsWithDetails))
   } catch (error) {
     handleError(error)
+  }
+}
+
+export const deleteAppliedJob = async ({ userId, jobId, path }: DeleteAppliedJobParams) => {
+  try {
+    await connectToDatabase()
+
+    const deletedAppliedJob = await AppliedJob.findOneAndDelete({ jobId, userId })
+    
+    if(deletedAppliedJob) revalidatePath(path)
+    
+  } catch (error) {
+    handleError(error)
+  }  
+}
+
+
+export async function isJobApplied({ userId, jobId }: IsAppliedJobParams) {
+  try {
+    await connectToDatabase();
+
+    const appliedJob = await AppliedJob.findOne({ userId, jobId });
+
+    return !!appliedJob;
+  } catch (error) {
+    handleError(error);
+    return false; 
   }
 }
 
