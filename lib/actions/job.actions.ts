@@ -14,6 +14,8 @@ const getRecruiterDetails = async (query: any) => {
 export const createJob = async ({ job, userId, path }: CreateJobParams) => {
   try {
     await connectToDatabase()
+    console.log(userId);
+    
 
     const recruiter = await User.findById(userId)
 
