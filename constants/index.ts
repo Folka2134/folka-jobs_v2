@@ -5,7 +5,22 @@ export const NavLinks = [
   },
   {
     label: "Profile",
-    route: "/profile/"
+    route: "/profile/saved-jobs"
+  },
+]
+
+export const JobNavLinks = [
+  {
+    label: "Saved Jobs",
+    route: "/profile/saved-jobs"
+  },
+  {
+    label: "Applied Jobs",
+    route: "/profile/applied-jobs"
+  },
+  {
+    label: "Posted Jobs",
+    route: "/profile/posted-jobs"
   },
 ]
 export const jobDefaultValues = {
