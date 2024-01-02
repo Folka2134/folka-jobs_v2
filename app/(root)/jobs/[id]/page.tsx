@@ -9,8 +9,6 @@ import { SearchParamProps } from "@/types";
 import { formatDateTime } from "@/lib/utils";
 import { auth } from "@clerk/nextjs";
 import UserButton from "@/components/shared/UserButton";
-import { useState } from "react";
-import { SavedJob } from "@/lib/database/models/job.model";
 import Link from "next/link";
 
 const JobPage = async ({ params: { id } }: SearchParamProps) => {
