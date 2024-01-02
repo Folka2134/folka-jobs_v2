@@ -1,5 +1,4 @@
 import { Schema, model, models } from "mongoose";
-import { boolean } from "zod";
 
 const UserSchema = new Schema({
   clerkId: { type: String, required: true, unique: true },
@@ -8,7 +7,6 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: {type: String, required: true },
   photo: { type: String, required: true },
-  premium: { type: Boolean, required: true}
 })
 
 const User = models.User || model('User', UserSchema);
