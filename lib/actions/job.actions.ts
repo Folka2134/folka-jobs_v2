@@ -14,8 +14,6 @@ const getRecruiterDetails = async (query: any) => {
 export const createJob = async ({ job, userId, path }: CreateJobParams) => {
   try {
     await connectToDatabase()
-    console.log(userId);
-    
 
     const recruiter = await User.findById(userId)
 
@@ -24,6 +22,7 @@ export const createJob = async ({ job, userId, path }: CreateJobParams) => {
     }
 
     const newJob = await Job.create({ ...job, recruiter: userId})
+    revalidatePath(path)
 
     return JSON.parse(JSON.stringify(newJob))
   } catch (error) {
@@ -89,7 +88,7 @@ export const getAllJobs = async ({ query, limit=6, page} : GetAllJobsParams) => 
   }
 }
 
-export async function updateJob({ userId, job, path }: UpdateJobParams) {
+export async function updateJob({ userId, job, path }: UpdateJobParams) {  
   try {
     await connectToDatabase()
 
