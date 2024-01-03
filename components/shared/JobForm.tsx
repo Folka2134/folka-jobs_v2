@@ -24,7 +24,7 @@ import { useState } from "react";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useRouter } from "next/navigation";
-import { createJob } from "@/lib/actions/job.actions";
+import { createJob, updateJob } from "@/lib/actions/job.actions";
 import { IJob } from "@/lib/database/models/job.model";
 
 type JobFormProps = {
@@ -36,7 +36,8 @@ type JobFormProps = {
 
 const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const initialValues = job && type === "Update" ? job : jobDefaultValues;
+  const initialValues =
+    job && type === "Update" ? { ...job } : jobDefaultValues;
   const router = useRouter();
 
   const { startUpload } = useUploadThing("imageUploader");
@@ -48,33 +49,64 @@ const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof jobFormSchema>) {
-    let uploadedImageUrl = values.imageUrl;
+    // let uploadedImageUrl = values.imageUrl;
 
-    if (files.length > 0) {
-      const uploadedImage = await startUpload(files);
+    // if (files.length > 0) {
+    //   const uploadedImage = await startUpload(files);
 
-      if (!uploadedImage) return;
+    //   if (!uploadedImage) return;
 
-      uploadedImageUrl = uploadedImage[0].url;
-    }
+    //   uploadedImageUrl = uploadedImage[0].url;
+    // }
 
     if (type === "Create") {
-      try {
-        const newJob = await createJob({
-          job: {
-            ...values,
-            imageUrl: uploadedImageUrl,
-          },
-          userId,
-          path: "/profile",
-        });
-        if (newJob) {
-          form.reset();
-          router.push(`/jobs/${newJob._id}`);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      console.log("trying to create");
+
+      // try {
+      //   const newJob = await createJob({
+      //     job: {
+      //       ...values,
+      //       imageUrl: uploadedImageUrl,
+      //     },
+      //     userId,
+      //     path: "/profile",
+      //   });
+      //   if (newJob) {
+      //     form.reset();
+      //     router.push(`/jobs/${newJob._id}`);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    }
+
+    if (type === "Update") {
+      console.log("trying to update");
+
+      console.log(jobId);
+
+      // if (!jobId) {
+      //   router.back();
+      //   return;
+      // }
+      // try {
+      //   const updatedJob = await updateJob({
+      //     job: {
+      //       _id: jobId,
+      //       ...values,
+      //       imageUrl: uploadedImageUrl,
+      //     },
+      //     userId,
+      //     path: `/jobs/${jobId}`,
+      //   });
+
+      //   if (updatedJob) {
+      //     form.reset();
+      //     router.push(`/jobs/${updatedJob._id}`);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
     }
   }
 
@@ -247,7 +279,7 @@ const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
           disabled={form.formState.isSubmitting}
           className="button col-span-2 w-full"
         >
-          {form.formState.isSubmitting ? "Submitting..." : `${type} Job `}
+          {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
         </Button>
       </form>
     </Form>
