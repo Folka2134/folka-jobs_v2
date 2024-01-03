@@ -42,7 +42,7 @@ const JobCard = async ({ job }: CardProps) => {
           </p>
         </div>
       </Link>
-      {user?.publicMetadata.userId === job.recruiter._id ? (
+      {user?.publicMetadata.userId === job.recruiter._id && (
         <Link
           href={`/jobs/${job._id}/update`}
           className="flex justify-center gap-2"
@@ -55,8 +55,6 @@ const JobCard = async ({ job }: CardProps) => {
           />
           <button>Update</button>
         </Link>
-      ) : (
-        <button>Apply now!</button>
       )}
     </div>
   );

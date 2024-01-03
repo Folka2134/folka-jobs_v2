@@ -10,7 +10,7 @@ import React from "react";
 import { usePathname } from "next/navigation";
 
 type UserButtonProps = {
-  buttonType: "Save" | "Unsave" | "Apply" | "Unapply";
+  buttonType: string;
   userId: string;
   jobId: string;
 };
@@ -45,7 +45,10 @@ const UserButton = ({ buttonType, userId, jobId }: UserButtonProps) => {
   const path = usePathname();
 
   return (
-    <button onClick={() => handleButtonClick(buttonType, userId, jobId, path)}>
+    <button
+      className="w-full"
+      onClick={() => handleButtonClick(buttonType, userId, jobId, path)}
+    >
       {buttonType}
     </button>
   );
