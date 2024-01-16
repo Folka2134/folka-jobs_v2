@@ -110,6 +110,18 @@ export async function updateJob({ userId, job, path }: UpdateJobParams) {
   }
 }
 
+export const deleteJob = async ({ jobId, path }: DeleteJobParams) => {
+  try {
+    await connectToDatabase()
+
+    const deletedJob = await Job.findByIdAndDelete(jobId)
+    
+    if(deletedJob) revalidatePath(path)
+  } catch (error) {
+    handleError(error)
+  }  
+}
+
 // SAVE JOB
 export async function saveJob({ userId, jobId, path } : SaveJobParams) {
   try {
@@ -231,14 +243,3 @@ export async function isJobApplied({ userId, jobId }: IsAppliedJobParams) {
   }
 }
 
-export const deleteJob = async ({ jobId, path }: DeleteJobParams) => {
-  try {
-    await connectToDatabase()
-
-    const deletedJob = await Job.findByIdAndDelete(jobId)
-    
-    if(deletedJob) revalidatePath(path)
-  } catch (error) {
-    handleError(error)
-  }  
-}

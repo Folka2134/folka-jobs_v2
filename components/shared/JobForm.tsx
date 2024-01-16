@@ -49,35 +49,35 @@ const JobForm = ({ userId, type, job, jobId }: JobFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof jobFormSchema>) {
-    // let uploadedImageUrl = values.imageUrl;
+    let uploadedImageUrl = values.imageUrl;
 
-    // if (files.length > 0) {
-    //   const uploadedImage = await startUpload(files);
+    if (files.length > 0) {
+      const uploadedImage = await startUpload(files);
 
-    //   if (!uploadedImage) return;
+      if (!uploadedImage) return;
 
-    //   uploadedImageUrl = uploadedImage[0].url;
-    // }
+      uploadedImageUrl = uploadedImage[0].url;
+    }
 
     if (type === "Create") {
       console.log("trying to create");
 
-      // try {
-      //   const newJob = await createJob({
-      //     job: {
-      //       ...values,
-      //       imageUrl: uploadedImageUrl,
-      //     },
-      //     userId,
-      //     path: "/profile",
-      //   });
-      //   if (newJob) {
-      //     form.reset();
-      //     router.push(`/jobs/${newJob._id}`);
-      //   }
-      // } catch (error) {
-      //   console.log(error);
-      // }
+      try {
+        const newJob = await createJob({
+          job: {
+            ...values,
+            imageUrl: uploadedImageUrl,
+          },
+          userId,
+          path: "/profile",
+        });
+        if (newJob) {
+          form.reset();
+          router.push(`/jobs/${newJob._id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     if (type === "Update") {
